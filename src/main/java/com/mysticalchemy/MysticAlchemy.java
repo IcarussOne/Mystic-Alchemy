@@ -1,41 +1,38 @@
 package com.mysticalchemy;
 
-import com.mysticalchemy.config.Config;
-import com.mysticalchemy.init.*;
-import net.minecraftforge.eventbus.api.IEventBus;
+import com.mysticalchemy.registry.IngredientLoader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.loading.FMLPaths;
-import org.apache.logging.log4j.Level;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
-@Mod("mysticalchemy")
+@Mod(modid = MysticAlchemy.MODID, name = MysticAlchemy.NAME, version = MysticAlchemy.VERSION)
 public class MysticAlchemy {
-	public static final String MODID = "mysticalchemy";
-	public static final Logger LOGGER = LogManager.getLogger();
-	final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public static final String MODID = "mysticalchemy";
+    public static final String NAME = "Mystic Alchemy Legacy";
+    public static final String VERSION = "1.0.0";
 
-	public MysticAlchemy() {
-		final boolean HIDE_CONSOLE_NOISE = false; 
-		if (HIDE_CONSOLE_NOISE) {
-			ForgeLoggerTweaker.setMinimumLevel(Level.WARN);
-			ForgeLoggerTweaker.applyLoggerFilter();
-		}
-		
-		//load config
-		Config.loadConfig(Config.CONFIG, FMLPaths.CONFIGDIR.get().resolve("mystic-alchemy-brewing-config.toml"));
+    public static final Logger LOGGER = LogManager.getLogger(NAME);
 
-		ItemInit.ITEMS.register(modEventBus);
-		BlockInit.BLOCKS.register(modEventBus);
-		TileEntityInit.TILE_ENTITY_TYPES.register(modEventBus);
-		RecipeInit.SERIALIZERS.register(modEventBus);
-		RecipeInit.RECIPE_TYPES.register(modEventBus);
-		
-		if (FMLEnvironment.dist.isClient()) {
-			modEventBus.register(TileEntityClientInit.class);
-		};
-	}
+    @SidedProxy(clientSide = "com.mysticalchemy.client.ClientProxy", serverSide = "com.mysticalchemy.CommonProxy")
+    public static CommonProxy proxy;
+
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        proxy.preInit(event);
+    }
+
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
+        proxy.init(event);
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        IngredientLoader.loadPotionIngredientRecipes();
+        proxy.postInit(event);
+    }
 }

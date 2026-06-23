@@ -1,0 +1,6 @@
+{
+  "parent": "mysticalchemy:block/crucible_with_slime",
+  "textures": {
+    "5": "blocks/cobblestone"
+  }
+}

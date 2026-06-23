@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "mysticalchemy:crucible_with_slime"
+    },
+    "level=1": {
+      "model": "mysticalchemy:crucible_with_slime"
+    },
+    "level=2": {
+      "model": "mysticalchemy:crucible_with_slime"
+    },
+    "level=3": {
+      "model": "mysticalchemy:crucible_with_slime"
+    }
+  }
+}

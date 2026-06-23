@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "mysticalchemy:crucible_melted_stage0"
+    },
+    "stage=1": {
+      "model": "mysticalchemy:crucible_melted_stage1"
+    },
+    "stage=2": {
+      "model": "mysticalchemy:crucible_melted_stage2"
+    },
+    "stage=3": {
+      "model": "mysticalchemy:crucible_melted_stage3"
+    }
+  }
+}

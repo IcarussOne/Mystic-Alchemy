@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "mysticalchemy:crucible_with_jelly"
+    },
+    "level=1": {
+      "model": "mysticalchemy:crucible_with_jelly"
+    },
+    "level=2": {
+      "model": "mysticalchemy:crucible_with_jelly"
+    },
+    "level=3": {
+      "model": "mysticalchemy:crucible_with_jelly"
+    }
+  }
+}

@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
-      "model": "mysticalchemy:block/crucible"
+    "level=0": {
+      "model": "mysticalchemy:crucible"
+    },
+    "level=1": {
+      "model": "mysticalchemy:crucible"
+    },
+    "level=2": {
+      "model": "mysticalchemy:crucible"
+    },
+    "level=3": {
+      "model": "mysticalchemy:crucible"
     }
   }
 }

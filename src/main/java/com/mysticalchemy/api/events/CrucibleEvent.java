@@ -1,91 +1,94 @@
 package com.mysticalchemy.api.events;
 
 import com.mysticalchemy.recipe.PotionIngredientRecipe;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.Cancelable;
-import net.minecraftforge.eventbus.api.Event;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.util.HashMap;
 
 /**
- * This event is fired when the crucible is used.
+ * Base Forge event type for interactions with the alchemy crucible.
+ *
+ * <p>Subscribe to subclasses of this event to hook into crucible processing stages.</p>
  */
 public class CrucibleEvent extends Event {
-
-    public CrucibleEvent() {}
-
-
     /**
-     * CrucibleEvent.AddIngredient is fired when an ingredient is added to the crucible.<br>
-     * <br>
-     * {@link #effects} contains the effects already stored in the crucible.<br>
-     * {@link #recipe} contains the {@code potion_ingredient recipe} that is being added to the crucible.<br>
-     * {@link #stack} contains the ItemStack that is being added to the crucible.<br>
-     * <br>
-     * The recipe can be modified during the event's execution to affect what happens when the ingredient is added.<br>
-     * The stack size can also be increased or decreased during the event's execution.<br>
-     * <br>
-     * This event has a {@link HasResult result}:<br>
-     * <ul>
-     * <li>{@link Result#ALLOW} means this ingredient can be added.</li>
-     * <li>{@link Result#DEFAULT} means the {@code potion_ingredient recipe} is used to determine the behaviour.</li>
-     * <li>{@link Result#DENY} means this ingredient cannot be added.</li>
-     * </ul>
+     * Fired when an ingredient is about to be applied to an active crucible brew.
+     *
+     * <p>This event has a result; handlers can allow or deny ingredient processing.</p>
      */
     @HasResult
     public static class AddIngredient extends CrucibleEvent {
-        private HashMap<MobEffect, Float> effects = new HashMap<>();
+        private final HashMap<Potion, Float> effects;
         private final PotionIngredientRecipe recipe;
         private final ItemStack stack;
 
-
-        public AddIngredient(HashMap<MobEffect, Float> effects, PotionIngredientRecipe recipe, ItemStack stack) {
-            super();
+        /**
+         * Creates an ingredient-addition event.
+         *
+         * @param effects the mutable potion effect map currently tracked by the crucible
+         * @param recipe  the matched recipe data for the provided ingredient
+         * @param stack   the ingredient stack being inserted
+         */
+        public AddIngredient(HashMap<Potion, Float> effects, PotionIngredientRecipe recipe, ItemStack stack) {
             this.effects = effects;
             this.recipe = recipe;
             this.stack = stack;
         }
 
-        public HashMap<MobEffect, Float> getEffects() {
+        /**
+         * @return the current crucible effect map keyed by potion type
+         */
+        public HashMap<Potion, Float> getEffects() {
             return effects;
         }
+
+        /**
+         * @return the recipe matched for the ingredient being added
+         */
         public PotionIngredientRecipe getRecipe() {
             return recipe;
         }
+
+        /**
+         * @return the ingredient stack that triggered this event
+         */
         public ItemStack getStack() {
             return stack;
         }
     }
 
-
     /**
-     * CrucibleEvent.ExtractPotion is fired when a player extracts a potion from the crucible.<br>
-     * <br>
-     * {@link #stack} contains the potion that is being extracted from the crucible.<br>
-     * {@link #player} contains the Player that is extracting the potion.<br>
-     * <br>
-     * The stack can be modified during the event's execution to affect what potion is extracted.<br>
-     * <br>
-     * This event has no {@link HasResult result}.
+     * Fired when a player extracts potion output from the crucible.
      */
     public static class ExtractPotion extends CrucibleEvent {
         private final ItemStack stack;
-        private final Player player;
+        private final EntityPlayer player;
 
-        public ExtractPotion(ItemStack potionstack, Player player) {
-            super();
-            this.stack = potionstack;
+        /**
+         * Creates a potion extraction event.
+         *
+         * @param potionStack the potion container stack being filled or taken
+         * @param player      the player performing the extraction action
+         */
+        public ExtractPotion(ItemStack potionStack, EntityPlayer player) {
+            this.stack = potionStack;
             this.player = player;
         }
 
+        /**
+         * @return the potion container stack involved in extraction
+         */
         public ItemStack getStack() {
             return stack;
         }
 
-        public Player getPlayer() {
+        /**
+         * @return the player extracting potion from the crucible
+         */
+        public EntityPlayer getPlayer() {
             return player;
         }
     }
